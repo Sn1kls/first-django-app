@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "djtasks"
 version = "0.1.0"
-description = ""
+description = "A simple Django project."
 authors = ["Snikls <macks.chigrin@gmail.com>"]
 readme = "README.md"
 
@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.13"
 django = "^5.1.2"
 
+[tool.poetry.packages]
+include = [{ include = "djtasks" }]  # Назва основної папки з кодом
 
 [build-system]
 requires = ["poetry-core"]
