@@ -1,9 +1,11 @@
 [tool.poetry]
-name = "basic-django"
+name = "first-django-app"
 version = "0.1.0"
 description = ""
 authors = ["Sn1kls <macks.chigrin@gmail.com>"]
-readme = "README.md"
+license = "MIT"
+package-mode = false
+
 
 [tool.poetry.dependencies]
 python = "^3.11"
