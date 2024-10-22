@@ -13,6 +13,7 @@ django-extensions = "^3.2.3"
 django = "^5.1.2"
 pygraphviz = "^1.14"
 pydotplus = "^2.0.2"
+python-dotenv = "^1.0.1"
 
 
 [build-system]
