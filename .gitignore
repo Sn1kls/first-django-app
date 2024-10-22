@@ -320,4 +320,6 @@ fabric.properties
 # poetry
 poetry.lock
 
+.python-version
+
 # End of https://www.toptal.com/developers/gitignore/api/django,macos,pycharm
