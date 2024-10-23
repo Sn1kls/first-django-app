@@ -13,7 +13,7 @@ class User(AbstractUser):
     street = models.CharField(max_length=100, blank=True)
     is_doctor = models.BooleanField(default=False)
 
-    REQUIRED_FIELDS = ["first_name", "last_name", "email", "phone_number", "city"]
+    REQUIRED_FIELDS = ["email"]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

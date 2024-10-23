@@ -10,5 +10,5 @@ RUN pip install poetry && \
     poetry install && \
     poetry add --no-cache gunicorn
 
-COPY . .
 
+COPY . .
