@@ -7,3 +7,26 @@ services:
       - .:/usr/src/app
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - chyhryn_network
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - chyhryn_network
+volumes:
+  postgres_data: { }
+networks:
+  chyhryn_network:
+    driver: bridge
