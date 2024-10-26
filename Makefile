@@ -1,11 +1,11 @@
 # Docker and general settings
 COMPOSE_FILE = docker-compose.yaml
-DB_CONTAINER = db
-WEB_CONTAINER = web
 DATABASE_FOLDER = database  # save dump and other database files
-DB_NAME = your_database_name
-DB_USER = postgres
-DB_PASSWORD = postgres
+# Load environment variables from .env file
+ifneq ("$(wildcard .env)","")
+    include .env
+    export
+endif
 
 # General commands
 .PHONY: build run start stop down clean restart logs prune
