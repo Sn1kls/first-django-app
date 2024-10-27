@@ -1,4 +1,4 @@
-FROM python:3.12.0
+FROM python:3.12.0 AS base
 
 # Set environment variables
 ENV PYTHONUNBUFFERED 1
@@ -13,5 +13,14 @@ RUN pip install poetry && \
     poetry install && \
     poetry add --no-cache gunicorn
 
+#dev stage
+FROM base AS dev
+RUN  poetry install
+
 # Copy the rest of the application code
+COPY . .
+
+#prod stage
+FROM base AS prod
+RUN poetry install --only-main
 COPY . .

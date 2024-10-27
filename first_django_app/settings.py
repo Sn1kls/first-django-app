@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+import redis
+from django.core.cache import cache
 
 load_dotenv()
 
@@ -177,3 +179,43 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+USE_REDIS = os.getenv("USE_REDIS", "False").lower() == "true"
+
+if USE_REDIS:
+    import redis
+    from django.core.cache import cache
+else:
+    cache = None  # Placeholder to avoid using cache when Redis is not available
+
+# Redis config
+# Redis config
+if USE_REDIS:
+    REDIS_HOST = os.getenv("REDIS_HOST", default="localhost")
+    REDIS_PORT = os.getenv("REDIS_PORT", default="6379")
+
+    # Cache settings
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
+        }
+    }
+
+    # Connect to Redis
+    try:
+        cache.set("check_redis", "redis is working", timeout=1)
+        if cache.get("check_redis") != "redis is working":
+            print("Redis is not working")
+    except redis.exceptions.ConnectionError:
+        print("Redis is not working or not connected")
+else:
+    print("Redis is disabled in the current environment.")
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        }
+    }

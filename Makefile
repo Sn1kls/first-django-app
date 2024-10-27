@@ -1,5 +1,5 @@
 # Docker and general settings
-COMPOSE_FILE = docker-compose.yaml
+COMPOSE_FILE = docker-compose.dev.yml
 DATABASE_FOLDER = database  # save dump and other database files
 # Load environment variables from .env file
 ifneq ("$(wildcard .env)","")

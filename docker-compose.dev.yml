@@ -2,9 +2,8 @@ services:
   web:
     build:
       context: .
+      dockerfile: Dockerfile.dev
     command: bash -c "poetry run python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/usr/src/app
     ports:
       - "8000:8000"
     depends_on:
@@ -26,7 +25,7 @@ services:
     networks:
       - chyhryn_network
 volumes:
-  postgres_data: { }
+  postgres_data: {}
 networks:
   chyhryn_network:
     driver: bridge
