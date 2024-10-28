@@ -13,6 +13,8 @@ services:
       - chyhryn_network
     env_file:
       - ./environment/dev.env
+    volumes:
+      - .:/usr/src/app
   db:
     image: postgres:latest
     environment:

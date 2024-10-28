@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 from datetime import timedelta
 import redis
 from django.core.cache import cache
+import logging
 
 load_dotenv()
 
@@ -24,6 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+
+# Load the environment file based on DJANGO_ENV value
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development")
+
+if ENVIRONMENT == "production":
+    load_dotenv(os.path.join(BASE_DIR, "environment/prod.env"))
+else:
+    load_dotenv(os.path.join(BASE_DIR, "environment/dev.env"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -206,16 +215,58 @@ if USE_REDIS:
     }
 
     # Connect to Redis
-    try:
-        cache.set("check_redis", "redis is working", timeout=1)
-        if cache.get("check_redis") != "redis is working":
-            print("Redis is not working")
-    except redis.exceptions.ConnectionError:
-        print("Redis is not working or not connected")
-else:
-    print("Redis is disabled in the current environment.")
-    CACHES = {
-        "default": {
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    logger = logging.getLogger(__name__)
+
+    if USE_REDIS:
+        try:
+            cache.set("check_redis", "redis is working", timeout=1)
+            if cache.get("check_redis") != "redis is working":
+                logger.warning("Redis is not working: Value mismatch")
+        except redis.exceptions.ConnectionError:
+            logger.error("Redis is not working or not connected")
+    else:
+        logger.info("Redis is disabled in the current environment.")
+        CACHES = {
+            "default": {
+                "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            }
         }
-    }
+
+# Logging config
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(message)s",
+        },
+        "simple": {
+            "format": "%(levelname)s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "WARNING",
+            "class": "logging.FileHandler",
+            "filename": "django_debug.log",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "myapp": {
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
