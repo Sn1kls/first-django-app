@@ -22,5 +22,5 @@ COPY . .
 
 #prod stage
 FROM base AS prod
-RUN poetry install --only-main
+RUN poetry install
 COPY . .
