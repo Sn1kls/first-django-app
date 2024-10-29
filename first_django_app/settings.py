@@ -10,13 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
+import logging
 import os
-from dotenv import load_dotenv
 from datetime import timedelta
+from pathlib import Path
+
 import redis
 from django.core.cache import cache
-import logging
+from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -191,13 +194,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 USE_REDIS = os.getenv("USE_REDIS", "False").lower() == "true"
 
-if USE_REDIS:
-    import redis
-    from django.core.cache import cache
-else:
-    cache = None  # Placeholder to avoid using cache when Redis is not available
-
-# Redis config
 # Redis config
 if USE_REDIS:
     REDIS_HOST = os.getenv("REDIS_HOST", default="localhost")
@@ -214,23 +210,19 @@ if USE_REDIS:
         }
     }
 
-    # Connect to Redis
-    logger = logging.getLogger(__name__)
+    try:
+        cache.set("check_redis", "redis is working", timeout=1)
+        if cache.get("check_redis") != "redis is working":
+            logger.warning("Redis is not working: Value mismatch")
+    except redis.exceptions.ConnectionError:
+        logger.error("Redis is not working or not connected")
 
-    if USE_REDIS:
-        try:
-            cache.set("check_redis", "redis is working", timeout=1)
-            if cache.get("check_redis") != "redis is working":
-                logger.warning("Redis is not working: Value mismatch")
-        except redis.exceptions.ConnectionError:
-            logger.error("Redis is not working or not connected")
-    else:
-        logger.info("Redis is disabled in the current environment.")
-        CACHES = {
-            "default": {
-                "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         }
+    }
 
 # Logging config
 LOGGING = {
