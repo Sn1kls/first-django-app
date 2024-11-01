@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -13,7 +12,9 @@ class ProtectedView(APIView):
     def get(self, request):
         return Response({"message": "This is a protected view!"})
 
+
 User = get_user_model()
+
 
 class RegisterView(APIView):
     def post(self, request):
