@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY pyproject.toml poetry.lock* /usr/src/app/
 
 RUN pip install poetry && \
-    poetry install && \
+    poetry install --no-dev && \
     poetry add --no-cache gunicorn
 
 #dev stage
@@ -18,7 +18,7 @@ FROM base AS dev
 RUN  poetry install
 
 # Copy the rest of the application code
-COPY . .
+COPY . /usr/src/app
 
 #prod stage
 FROM base AS prod

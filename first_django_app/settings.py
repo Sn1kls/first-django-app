@@ -216,6 +216,10 @@ else:
         }
     }
 
+# Celery config
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
 # Logging config
 LOGGING = {
     "version": 1,
