@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from users.views import ProtectedView, RegisterView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,4 +28,6 @@ urlpatterns = [
     path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     path("api/protected/", ProtectedView.as_view(), name="protected_view"),
     path("api/register/", RegisterView.as_view(), name="register"),
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
+    path("api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="api-schema"), name="swagger-ui"),
 ]
