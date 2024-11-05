@@ -29,6 +29,11 @@ black = "^24.10.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.flake8]
+max-line-length = 120
+extend-ignore = ["E203", "W503"]
+exclude = [".git", "__pycache__", ".venv", ".vscode", ".vscode-test", ".pytest", "migrations", "settings.py", "manage.py", "db.sqlite3", ".mypy_cache", ".pytest_cache", ".vscode", ".vscode-test", ".gitignore", ".flake8", ".editorconfig", ".env", ".env.example", ".dockerignore", "Dockerfile"]
+
 [tool.isort]
 line_length = 120
 multi_line_output = 3
