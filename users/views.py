@@ -20,9 +20,8 @@ class RegisterView(APIView):
     def post(self, request):
         data = request.data
         user = User.objects.create_user(
-            username=data["username"],
-            password=data["password"],
             email=data["email"],
+            password=data["password"],
             first_name=data.get("first_name", ""),
             last_name=data.get("last_name", ""),
         )
@@ -34,3 +33,16 @@ class RegisterView(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        data = {
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+        }
+        return Response(data, status=status.HTTP_200_OK)
