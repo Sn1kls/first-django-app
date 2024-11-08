@@ -29,16 +29,15 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
-    city = models.CharField(max_length=100)
-    region = models.CharField(max_length=50, blank=True)
-    house_number = models.CharField(max_length=10, blank=True)
-    street = models.CharField(max_length=100, blank=True)
-    is_doctor = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
 
     def __str__(self):
         return f"{self.email}"
