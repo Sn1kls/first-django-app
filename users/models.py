@@ -23,12 +23,20 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+class UserRoles(models.TextChoices):
+    ADMIN = "admin", "Admin"
+    DEFAULT_USER = "user", "User"
+    MANAGER = "manager", "Manager"
+    OWNER = "owner", "Owner"
+
+
 class User(AbstractUser):
     username = None
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
+    role = models.CharField(max_length=20, choices=UserRoles.choices, default=UserRoles.DEFAULT_USER)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
