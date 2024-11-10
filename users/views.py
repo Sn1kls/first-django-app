@@ -66,3 +66,4 @@ class UserListView(generics.ListCreateAPIView):
     pagination_class = UserPagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = ["first_name", "email", "role"]
+    ordering = ["first_name"]
