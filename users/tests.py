@@ -6,12 +6,11 @@ from users.models import User, UserRoles
 
 class TestUserViews(APITestCase):
     def setUp(self):
-        self.adminUser = User.objects.create_user(
-            email="mkasw123@gmail.com", password="admin123", role=UserRoles.ADMIN)
+        self.adminUser = User.objects.create_user(email="mkasw123@gmail.com", password="admin123", role=UserRoles.ADMIN)
         self.managerUser = User.objects.create_user(
-            email="manager1@gmail.com", password="manager123", role=UserRoles.MANAGER)
-        self.user = User.objects.create_user(
-            email="user1@gmail.com", password="user123", role=UserRoles.DEFAULT_USER)
+            email="manager1@gmail.com", password="manager123", role=UserRoles.MANAGER
+        )
+        self.user = User.objects.create_user(email="user1@gmail.com", password="user123", role=UserRoles.DEFAULT_USER)
 
         self.url = reverse("user_list")
 
