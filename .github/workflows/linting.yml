@@ -1,4 +1,4 @@
-name: Flake8 Lint
+name: Linting
 
 on: [push, pull_request]
 
@@ -24,3 +24,7 @@ jobs:
       - name: Run Flake8
         run: |
           poetry run flake8 --max-line-length=120
+
+      - name: Run Black
+        run: |
+          poetry run black .
