@@ -4,11 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile
       target: dev
-    command: bash -c "poetry run python manage.py runserver 0.0.0.0:8000"
+    command: bash -c " poetry run python manage.py migrate &&
+                       poetry run python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     networks:
       - chyhryn_network
     env_file:
@@ -25,6 +27,16 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./environment/dev.env
+    networks:
+      - chyhryn_network
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
     env_file:
       - ./environment/dev.env
     networks:
