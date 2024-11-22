@@ -5,12 +5,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from users.permissions import IsAdminOrManager
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, NotificationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
+from rest_framework.generics import ListAPIView
+from users.models import Notification
 
 
 class ProtectedView(APIView):
@@ -72,3 +74,19 @@ class UserListView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = ["first_name", "email", "role"]
     ordering = ["first_name"]
+
+
+class NotificationPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = "page_size"
+    max_page_size = 20
+
+
+@method_decorator(ratelimit(key="user", rate="10000/d", block=True), name="dispatch")
+class UserNotificationsView(ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = NotificationPagination
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by("-created_at")
