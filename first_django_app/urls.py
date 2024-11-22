@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django_ratelimit.decorators import ratelimit
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
@@ -22,10 +23,26 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    path(
+        "api/token/",
+        ratelimit(key="user", rate="10000/d", block=True)(TokenObtainPairView.as_view()),
+        name="token_obtain_pair",
+    ),
+    path(
+        "api/token/refresh/",
+        ratelimit(key="user", rate="10000/d", block=True)(TokenRefreshView.as_view()),
+        name="token_refresh",
+    ),
+    path(
+        "api/token/verify/",
+        ratelimit(key="user", rate="10000/d", block=True)(TokenVerifyView.as_view()),
+        name="token_verify",
+    ),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
-    path("api/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="api-schema"), name="swagger-ui"),
+    path(
+        "api/schema/swagger-ui/",
+        ratelimit(key="user", rate="10000/d", block=True)(SpectacularSwaggerView.as_view(url_name="api-schema")),
+        name="swagger-ui",
+    ),
     path("api/users/", include("users.urls")),
 ]

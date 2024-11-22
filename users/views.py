@@ -9,6 +9,8 @@ from users.serializers import UserSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
 
 
 class ProtectedView(APIView):
@@ -21,6 +23,7 @@ class ProtectedView(APIView):
 User = get_user_model()
 
 
+@method_decorator(ratelimit(key="user", rate="5/d", block=True), name="dispatch")
 class RegisterView(APIView):
     def post(self, request):
         data = request.data
@@ -40,6 +43,7 @@ class RegisterView(APIView):
         )
 
 
+@method_decorator(ratelimit(key="user", rate="10000/d", block=True), name="dispatch")
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -59,6 +63,7 @@ class UserPagination(PageNumberPagination):
     max_page_size = 100
 
 
+@method_decorator(ratelimit(key="user", rate="10000/d", block=True), name="dispatch")
 class UserListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
