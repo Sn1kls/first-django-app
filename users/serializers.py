@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from users.models import User, Notification
+
+from users.models import Notification, User
 
 
 class UserSerializer(serializers.ModelSerializer):

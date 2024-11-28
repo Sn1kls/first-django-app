@@ -1,18 +1,19 @@
 from django.contrib.auth import get_user_model
-from rest_framework import status, generics, permissions
+from django.utils.decorators import method_decorator
+from django_filters.rest_framework import DjangoFilterBackend
+from django_ratelimit.decorators import ratelimit
+from rest_framework import generics, permissions, status
+from rest_framework.filters import OrderingFilter
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from users.permissions import IsAdminOrManager
-from users.serializers import UserSerializer, NotificationSerializer
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter
-from rest_framework.pagination import PageNumberPagination
-from django_ratelimit.decorators import ratelimit
-from django.utils.decorators import method_decorator
-from rest_framework.generics import ListAPIView
+
 from users.models import Notification
+from users.permissions import IsAdminOrManager
+from users.serializers import NotificationSerializer, UserSerializer
 
 
 class ProtectedView(APIView):
