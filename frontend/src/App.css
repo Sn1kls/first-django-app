@@ -1,0 +1,59 @@
+:root {
+    --primary: #fd7e14 !important;
+    --bs-dropdown-min-width: 5rem !important;
+}
+
+[class^="form-"]:focus {
+    border-color: rgba(255, 136, 39, 0.01) !important;
+    box-shadow: 0 0 .2rem 0.15rem rgba(255, 136, 39, 0.25) !important;
+}
+
+.form-select option {
+    height: 40px;
+}
+
+.dropdown-menu {
+    width: 100% !important;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+.dropdown-item:focus, .dropdown-item:active {
+    background-color: #fd9d4e !important;
+    color: white !important;
+}
+
+.modal-header {
+    padding: 8px 16px !important;  
+}
+
+.modal-footer {
+    padding: 8px 16px !important;  
+}
+
+.sm-button {
+    padding: 4px 12px !important;
+    margin: 0 !important;
+}
+
+.date-time-picker {
+    max-width: 380px !important;
+}
+
+.date-time-picker-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.date-time-picker-time-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px;
+    width: 100%;
+    border-radius: 4px;
+    background-color: rgb(239, 242, 247);
+}
