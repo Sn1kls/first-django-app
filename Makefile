@@ -12,7 +12,7 @@ endif
 
 # General commands
 .PHONY: build run start stop down clean restart logs prune makemigrations migrate migrations \
-        db-dump db-restore db-shell db-clear django-shell test
+        db-dump db-restore db-shell db-clear django-shell test dev_runbuild
 
 # ------DOCKER------
 # Build docker images
@@ -26,6 +26,11 @@ dev_run:
 	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up
 prod_run:
 	$(MAKE) ENV=prod dev_run
+
+dev_runbuild:
+	docker-compose -f $(COMPOSE_FILE) --env-file $(ENV_FILE) up --build
+prod_runbuild:
+	$(MAKE) ENV=prod dev_runbuild
 
 # Starting a project in the background (without logs)
 dev_start:
