@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_ratelimit",
     "channels",
+    "channels_redis",
 ]
 
 REST_FRAMEWORK = {
@@ -270,12 +271,14 @@ LOGGING = {
 CORS_ALLOWED_ORIGINS = [
     "https://sp-lutsk.com",
     "http://0.0.0.0:8000",
+    "http://localhost:8000",
+    "http://localhost:3000",
 ]
 
 ASGI_APPLICATION = "first_django_app.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.RedisChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [("redis", 6379)],
         },

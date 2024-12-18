@@ -4,7 +4,7 @@ import useWebSocket from "react-use-websocket";
 const WebSocketContext = createContext();
 
 export const WebSocketProvider = ({ children }) => {
-    const { sendJsonMessage, lastJsonMessage } = useWebSocket(`ws://localhost:8000/ws/notifications/`);
+    const { sendJsonMessage, lastJsonMessage } = useWebSocket(`ws://localhost:8000/ws/notifications/?Authorization=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0NTk3MTY0LCJpYXQiOjE3MzQ1MTA3NjQsImp0aSI6ImQ4M2UwYTJiZmQ1NjRiNThiODFmNTY3ZWM4OTRhNzFjIiwidXNlcl9pZCI6MX0.GYCz0_ekYFNH6-HTXhFHG_zzsJMlXugCWvvAacII9pE`);
 
     useEffect(() => {
         console.log("lastJsonMessage", lastJsonMessage);
@@ -14,7 +14,7 @@ export const WebSocketProvider = ({ children }) => {
         sendJsonMessage({
             action: "subscribe",
             user: "1",
-            token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzNTk3MjMwLCJpYXQiOjE3MzM1MTA4MzAsImp0aSI6IjQ0MTRiNWE4NTBmMDRmZGQ4MTc1ZDc2YThkOTE5NzVmIiwidXNlcl9pZCI6MX0.wp1rBDP68k62R_XOEFC76G24wC0IqdZV6-OGRixr8Jo",
+            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0NTk3MTY0LCJpYXQiOjE3MzQ1MTA3NjQsImp0aSI6ImQ4M2UwYTJiZmQ1NjRiNThiODFmNTY3ZWM4OTRhNzFjIiwidXNlcl9pZCI6MX0.GYCz0_ekYFNH6-HTXhFHG_zzsJMlXugCWvvAacII9pE",
         });
     }, []);
 
