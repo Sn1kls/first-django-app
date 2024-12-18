@@ -15,6 +15,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
         # Прив'язуємо підключення конкретно до користувача
         self.channel_name_for_user = f"user_{self.user.id}_channel"
+        await self.channel_layer.group_add(
+            self.channel_name_for_user, self.channel_name
+        )
+
         await self.accept()
 
         logger.info(f"User {self.user.id} connected to WebSocket on channel {self.channel_name}")
@@ -37,8 +41,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({"error": "Invalid JSON format"}))
 
     async def send_notification(self, event):
-        """
-        Метод для відправки повідомлення конкретному користувачу.
-        """
+        print("send_notification triggered:", event)
         message = event["message"]
         await self.send(text_data=json.dumps({"message": message}))
